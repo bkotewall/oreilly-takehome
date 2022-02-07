@@ -5,7 +5,7 @@ This is a working example of a multi-container flask application with Postgres a
 1. Bootstrap the DB
 ```bash
 $ docker-compose up -d db
-$ docker-compose run --rm flaskapp /bin/bash -c "cd /opt/services/flaskapp/src && python -c  'import database; database.init_db()'"
+$ docker-compose run --rm flaskapp /bin/bash -c "cd /opt/services/flaskapp/src && python -c  'import database; database.init_db()' && python -c 'import database; database.import_data()' "
 ```
 
 2. Bring up the cluster

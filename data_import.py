@@ -42,11 +42,12 @@ def import_data():
     except Exception as err:
         print(f"Other error happened: {err}")
     bdata_json = response_json["results"]
-    bookid = 0
+    bookid = 1 
     for book_data in bdata_json:
         try:
             if book_data["format"] == "book":
                 insert_book(bookid, book_data, db_session)
+                bookid = bookid+1
                 print(book_data["publishers"])
             else:
                 pass

@@ -7,7 +7,7 @@ class Book(Base):
     """
     Books table
     """
-    __tablename__ = 'book'
+    __tablename__ = 'Book'
     id = Column(Integer, primary_key=True)
     authors = Column(ARRAY(String, dimensions=5))
     title = Column(String(256))

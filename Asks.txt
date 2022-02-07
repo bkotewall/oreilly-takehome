@@ -1,0 +1,27 @@
+The O'Reilly search API provides information on the many books which are available on our Learning Platform. Your assignment is to develop a REST API in either Python or GoLang which pulls a small subset of the data from this API into a database and makes it accessible to users in JSON format. The API should include endpoints that allow users to get information on all of the books it has stored, a subset of these books, and a single book. We would also like you to provide an endpoint through which users can add more books to your API. Finally, containerize your application as you would if you were deploying it to a Kubernetes cluster.
+
+Within reason, please demonstrate knowledge of best practices across all parts of the challenge (software development, containerization, networking, security, deployments).
+
+- https://www.oreilly.com/online-learning/integration-docs/search.html Here are the docs for the search API from which you will be pulling your data. Query this API for the `author`, `title`, `ISBN`, and `description` fields.
+
+- Pick a programming language and search the O'Reilly API for books covering that language
+
+- For each book (max 200) store the ISBN, author, title, and description in the database. Return this same data to the user in a JSON dictionary when they make a GET request. Please provide a script (or other method) to load this data into the database.
+
+- You may use a pre-built image for the database but you should build your own for the application.
+
+
+
+Need the table for: author, title, ISBN, description 
+
+Language is Python
+
+Make a web api that returns the data in json format in a get request.  
+
+Make a script that loads this data into database.
+
+prebuilt image for database (done)
+
+image skeleton for application (done)
+
+

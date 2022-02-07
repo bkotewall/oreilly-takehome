@@ -1,7 +1,7 @@
 from database import Base
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.types import DateTime
-from sqlalchemy.dialects import postgresql
+from sqlalchemy.dialects.postgresql import ARRAY
 
 class Book(Base):
     """
@@ -9,7 +9,7 @@ class Book(Base):
     """
     __tablename__ = 'book'
     id = Column(Integer, primary_key=True)
-    authors = Column(postgresql.ARRAY(String, dimensions=5))
+    authors = Column(ARRAY(String, dimensions=5))
     title = Column(String(256))
     isbn = Column(String(17), unique=True)
     description = Column(String)

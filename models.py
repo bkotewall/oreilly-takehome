@@ -3,6 +3,7 @@ from sqlalchemy import Column, Integer, String
 from sqlalchemy.types import DateTime
 from sqlalchemy.dialects.postgresql import ARRAY
 
+
 class Book(Base):
     """
     Books table

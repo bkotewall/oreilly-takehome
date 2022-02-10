@@ -9,7 +9,8 @@ services:
     networks:
       - db_nw
   flaskapp:
-    build: .
+    # build: .
+    image: bkotewall/oreilly-takehome_flaskapp
     env_file:
       - env_file
     volumes:

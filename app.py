@@ -31,7 +31,7 @@ def title_search(title):
     print(title)
     book_ans = db_session.query(Book.id, Book.authors, Book.title,
                                 Book.isbn, Book.description).\
-                                filter(Book.title.match(f"%{title}%")).all()
+                               filter(Book.title.match(f"%{title}%")).all()
     return render_results(book_ans)
 
 
@@ -66,18 +66,16 @@ def add_book():
 
     if not content.keys() >= {"bookid", "authors", "isbn",
                               "description", "title"}:
-        return error_message_json(error, "please make sure all keys are present
-                                  when making api call")
+        return error_message_json(error, "Are all keys are present?")
 
     elif not isinstance(content["bookid"], int):
-        return error_message_json(error, "bookid is an int")
+        return error_message_json(error, "bookid is an int field")
     elif not isinstance(content["isbn"], str):
-        return error_message_json(error, "isbn is a string of 17 chars in
-                                  length")
+        return error_message_json(error, "isbn is a string field")
     elif not isinstance(content["authors"], list):
-        return error_message_json(error, "authors is a list of strings.")
+        return error_message_json(error, "authors field is a list of strings.")
     elif not isinstance(content["description"], str):
-        return error_message_json(error, "description is a long string.")
+        return error_message_json(error, "description field is a long string.")
     # check following:
     # bookid is there and it's an int
     # isbn is there and it's a string

@@ -9,9 +9,28 @@ be referenced throughout this code.
 App.py is a flask app that provides the RESTful interface as specified in the
 code specifications.  
 
-(Need to write more docs...)
+Available Routes:<br/>
+    /
+    This returns all books in the database in json form.
 
-Please refer to test_post.py as how to send data to the api.
+    /api/help
+    This provides a rudimentary list of all defined routes.
+
+    /api/title/<book title>
+    Select book(s) by title e.g. GET /api/title/"somestr"
+    This would return a json array with book titles that include "somestr"
+    
+    /api/bookid/start
+    Select book by bookid e.g. GET /api/bookid/12.   
+    This would return a json array with one dictionary of book 12.
+    
+    /api/bookid/start/end
+    Select book by range of bookids e.g. GET /api/bookid/12/18
+    This would return a json array with dictionaries of books 12 to 18,
+    inclusive.
+
+    /api/add_book/
+    Please refer to test_post.py as how to send data to the api.
 
 
 ## Usage

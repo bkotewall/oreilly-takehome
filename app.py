@@ -1,13 +1,15 @@
 import datetime
+import numpy as np
 import os
 
 from flask import Flask, request, jsonify
 
-from models import Book 
+from models import Book
 from database import db_session
 
 app = Flask(__name__)
 app.secret_key = os.environ['APP_SECRET_KEY']
+
 
 @app.route("/api/help")
 def help():
@@ -26,72 +28,61 @@ def help():
 @app.route("/api/title/<title>")
 def title_search(title):
     print(title)
-    find_title_query = Book.query.filter(Book.title.match(f"%{title}%"))
-    results = db_session.query(find_title_query)
-    return jsonify(render_results(results))
+    book_ans = db_session.query(Book.id, Book.authors, Book.title,
+                                        Book.isbn, Book.description).\
+                                        filter(Book.title.match(f"%{title}%")).all()
+    return render_results(book_ans)
+
 
 @app.route("/api/bookid/<start>/")
-@app.route("/api/bookid/<start>/<end>") 
+@app.route("/api/bookid/<start>/<end>")
 def bookid_lookup(start=None, end=None):
-    if not start:
-        results = {}
-        return jsonify(results)
-    elif not end:
-        results = db_session.query(Book).get(start)
-        book_dict = {}
-        book_dict['id'] = results.id
-        book_dict['authors'] = results.authors
-        book_dict['title'] = results.title
-        book_dict['isbn'] = results.isbn
-        book_dict['description'] = results.description
-        return jsonify(book_dict)
-
+    results = []
+    if not end:
+        book_ans = db_session.query(Book.id, Book.authors, Book.title,
+                                    Book.isbn, Book.description).\
+                                    filter(Book.id == start).all()
     else:
-        results = db_session.query(Book).filter(Book.id >= start, Book.id <=
-                end).all()
-        print(results)
-        return jsonify(render_results(results))
+        book_ans = db_session.query(Book.id, Book.authors, Book.title,
+                                    Book.isbn, Book.description).\
+                                    filter(Book.id >= start, Book.id <= end).\
+                                    all()
+    return render_results(book_ans)
 
-@app.route("/api/add_book/<bookid>", methods=['POST'])
-def add_book(id):
+
+@app.route("/api/add_book", methods=['POST'])
+def add_book():
     content = request.json
-    newbook = Book(id = bookid,
-                   isbn = content["isbn"],
-                   authors = content["authors"],
-                   title = content["title"],
-                   description = content["description"]
-                  )
-    db_session.add(newbook)
-    db_session.commit()
+    if not content:
+        error = dict()
+        error["reason"] = "please pass the right argument"
+        results = list(np.ravel(error))
+        return jsonify(results=error)
+    else:
+        print(content)
+        newbook = Book(id=content["bookid"],
+                       isbn=content["isbn"],
+                       authors=content["authors"],
+                       title=content["title"],
+                    description=content["description"])
+        db_session.add(newbook)
+        db_session.commit()
+        success = dict()
+        success["reason"] = "book record added"
+        results = list(np.ravel(success))
+        return jsonify(results=success)
+
 
 @app.route("/")
 def index():
     results = db_session.query(Book.id, Book.authors, Book.title, Book.isbn,
-            Book.description).all()
+                               Book.description).all()
+    return render_results(results)
 
-    all_results = []
-    for id, authors, title, isbn, description in results:
-        book_dict = {}
-        book_dict['id'] = id
-        book_dict['authors'] = authors
-        book_dict['title'] = title
-        book_dict['isbn'] = isbn
-        book_dict['description'] = description
-        all_results.append(book_dict)
-    return jsonify(all_results)
 
-def render_results(sql_alchemy_results):
-    print(sql_alchemy_results)
-    for id, authors, title, isbn, description in sql_alchemy_results:
-        book_dict = {}
-        book_dict['id'] = id
-        book_dict['authors'] = authors
-        book_dict['title'] = title
-        book_dict['isbn'] = isbn
-        book_dict['description'] = description
-        all_results.append(book_dict)
-    print(all_results)
-    return all_results
+def render_results(query_res):
+    answer = list(np.ravel(query_res))
+    return jsonify(results=answer)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5090, debug=True)

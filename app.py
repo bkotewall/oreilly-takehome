@@ -1,4 +1,5 @@
 import datetime
+import json
 import numpy as np
 import os
 
@@ -52,19 +53,22 @@ def bookid_lookup(start=None, end=None):
 
 @app.route("/api/add_book", methods=['POST'])
 def add_book():
-    content = request.json
-    if not content:
+    request_data = request.json
+    if not request_data:
         error = dict()
         error["reason"] = "please pass the right argument"
         results = list(np.ravel(error))
         return jsonify(results=error)
     else:
+        print(request_data)
+        content = json.loads(request_data)
         print(content)
-        newbook = Book(id=content["bookid"],
-                       isbn=content["isbn"],
-                       authors=content["authors"],
-                       title=content["title"],
-                    description=content["description"])
+        newbook = Book()
+        newbook.id=content["bookid"]
+        newbook.isbn=content["isbn"]
+        newbook.authors=content["authors"]
+        newbook.title=content["title"]
+        newbook.description=content["description"]
         db_session.add(newbook)
         db_session.commit()
         success = dict()

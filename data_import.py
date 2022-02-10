@@ -6,6 +6,7 @@ import requests
 from models import Book
 from database import db_session
 
+
 def request_url():
     url_root = 'https://learning.oreilly.com/api/v2/search/'
     query = '?limit=200&query=python'
@@ -16,12 +17,11 @@ def request_url():
 
 
 def insert_book(bk_id, bk_data, dbh):
-    newbook = Book(id = bk_id,
-                   isbn = bk_data["isbn"],
-                   authors = bk_data["authors"],
-                   title = bk_data["title"],
-                   description = bk_data["description"]
-                  )
+    newbook = Book(id=bk_id,
+                   isbn=bk_data["isbn"],
+                   authors=bk_data["authors"],
+                   title=bk_data["title"],
+                   description=bk_data["description"])
     try:
         dbh.add(newbook)
         dbh.commit()
@@ -42,7 +42,7 @@ def import_data():
     except Exception as err:
         print(f"Other error happened: {err}")
     bdata_json = response_json["results"]
-    bookid = 1 
+    bookid = 1
     for book_data in bdata_json:
         try:
             if book_data["format"] == "book":
